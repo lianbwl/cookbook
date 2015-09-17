@@ -1,0 +1,234 @@
+// ---------------------- \\
+\\ ---------------------- //
+// COOKBOOK JULIAN VIANNA \\
+\\ ---------------------- //
+// ---------------------- \\
+
+||||||||||||||||||||||||||
+|| -------------------- ||
+|| ----- CSS/SCSS ----- ||
+|| -------------------- ||
+||||||||||||||||||||||||||
+
+// --------------------------------------------//
+\\ - IMG CENTRALIZADA EM UM DETERMINDO QUADRO -\\
+// --------------------------------------------//
+
+.quadro{
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover; <-- manipula a img para caber no quadro definido, recortando e centralizando. Nesse caso o quadro tem: 200x200
+}
+
+// -------------------------------------------------//
+\\ - BACKGROUND DINAMICO E RELATIVO AO TAM. DA PG. -\\
+// -------------------------------------------------//
+
+.nome_classe{
+  background: url(images/bg.jpg) no-repeat center center fixed/scroll/etc; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+// ------------------------------------------------//
+\\ - MENU 100% E COM ITENS COM LARGURA AUTOMATICA -\\
+// ------------------------------------------------//
+
+ul.sitemenu{
+  display: table; <----------------- importante
+  width: 100%; <----------------- importante
+  height: 55px;
+
+  li{
+    display: table-cell; <----------------- importante
+    width: 1%; <----------------- opcional | sem inserir ele fica com largura automática
+    height: 55px;
+
+		a{
+		  display: block;
+		  @include font-stack($font1, 22px, #FFF, 400);
+		  line-height: 1;
+		  text-align: center;
+		  padding: 16px 0 0;
+		}
+  }
+}
+
+// -----------------------------------------//
+\\ - CORRIGE PROBLEMA COM BOX 100% NO IPAD -\\
+// -----------------------------------------//
+
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px){
+  
+  html { width: 1225px; -webkit-appearance: none !important; }
+  /*inserir outras tags que necessitam de */  
+
+}
+
+// --------------------------//
+\\ - LOOP DE FUNCAO NO SASS -\\
+// --------------------------//
+
+@for $i from 1 through 25 {
+  a.lk#{$i} { 
+    background:url(../imgs/links/link_#{$i}.jpg); 
+    &:hover{ background:url(../imgs/links/texto_#{$i}.jpg); }
+  }
+}
+
+--> #{$i} se refere ao numero do contador
+
+// ----------------------------------------//
+\\ - SASS | FUNCTION PARA INSERIR VENDORS -\\
+// ----------------------------------------//
+
+@mixin navigatorsVendors($property, $value) {
+  -webkit-#{$property}: $value;
+     -moz-#{$property}: $value;
+      -ms-#{$property}: $value;
+          #{$property}: $value;
+}
+
+// ---------------------------------//
+\\ - SASS | FUNCTION PARA ANIMAÇÃO -\\
+// ---------------------------------//
+
+@mixin transition($velocity){
+  -webkit-transition: all ease-in-out $velocity; /* Safari and Chrome */
+  -moz-transition: all ease-in-out $velocity; /* Firefox 4 */
+  -o-transition: all ease-in-out $velocity; /* Opera */
+  -ms-transition: all ease-in-out $velocity; /* IE */
+  transition: all ease-in-out $velocity; /* W3C */
+
+  //EX: $velocity = 500ms
+}
+
+||||||||||||||||||||||||
+|| ------------------ ||
+|| ----- jQUERY ----- ||
+|| ------------------ ||
+||||||||||||||||||||||||
+
+// --------------------//
+\\ - ALINHA PAGINAÇÃO -\\
+// --------------------//
+
+  var pagW = $(".dohms-pagnav").width();
+
+  console.log(pagW);
+
+  $(".dohms-pagnav").css({
+    width: pagW,
+    margin: '0 auto',
+    float: 'none'
+  });
+
+// --------------------//
+\\ - SHOW WINDOW SIZE -\\
+// --------------------//
+
+<script>
+$(document).ready(function($) {
+    var size = $(window).width();
+
+    $(".console").html(size);
+
+});
+</script>
+
+.console{
+  position: absolute;
+  background: #FFF;
+  color: #333;
+  padding: 10px;
+  z-index: 9999;
+}
+
+// ------------------//
+\\ - TIMEOUT jQUERY -\\
+// ------------------//
+
+setTimeout(function(){
+  doSome();
+}, 2000);
+
+// --------------------//
+\\ - RANDOMIZE THINGS -\\
+// --------------------//
+
+function randomize() {
+  var x = Math.floor((Math.random() * 5) + 1);
+  // aqui vai randomizar entre 1 - 5
+}
+
+// --------------------------//
+\\ - HAMBURGUER MENU MOBILE -\\
+// --------------------------//
+ 
+$(".hamburguer-menu").click(function(event) {
+  $(".ddmenu").slideToggle("fast");
+});
+
+// -----------------//
+\\ - DROPDOWN MENU -\\
+// -----------------//
+
+$(".bt-submenu").mouseover(function(event) {
+  $(this).children("ul.submenu").show('fast');
+});
+
+$(".bt-submenu").mouseleave(function(event) {
+  $(this).children("ul.submenu").stop(true, true).hide('fast');
+});
+
+// ------------------------------------//
+\\ - DO SOMETHING ON SELECTION CHANGE -\\
+// ------------------------------------//
+
+$("select").change(function() {
+  alert( "Handler for .change() called. Do something" );
+});
+
+// ------------------//
+\\ - ACCORDION MENU -\\
+// ------------------//
+
+$(".botao").click( function(){
+  /*---------------------------------------------
+  passa por todos os elementos irmaos e
+  aplica apenas no que encontrar o filtro ".area"
+  ----------------------------------------------*/
+  $(this).nextAll(".area").toggle("fast");
+});
+
+// ------------------//
+\\ - BINDING EVENTS -\\
+// ------------------//
+
+function saiBallon(e){      
+  $(".pos-ballon-"+e.data.panel).slideUp("fast");
+}
+  
+$("a#ballon1").bind('mouseleave', {panel:"a"}, saiBallon);
+$("a#ballon2").bind('mouseleave', {panel:"b"}, saiBallon);
+
+// --------------------//
+\\ - CAPTION IMG SIZE -\\
+// --------------------//
+
+var imgWidht = $(".dohms-interna-noticias-imagem img").width();
+console.log(imgWidht);
+$(".dohms-interna-noticias-figcaption").css("width", imgWidht); 
+
+//binding events
+function saiBallon(e){      
+  $(".pos-ballon-"+e.data.panel).slideUp("fast");
+}

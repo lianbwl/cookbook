@@ -235,3 +235,64 @@ $(".dohms-interna-noticias-figcaption").css("width", imgWidht);
 function saiBallon(e){      
   $(".pos-ballon-"+e.data.panel).slideUp("fast");
 }
+
+||||||||||||||||||||||||
+|| ------------------ ||
+|| ---- PHP / WP ---- ||
+|| ------------------ ||
+||||||||||||||||||||||||
+
+// --------------------------------------------//
+\\ - GET THE PAGE CONTENT WITHOUT IMG FROM ID -\\
+// --------------------------------------------//
+
+<?php
+  $my_id = 2;
+  $post_id = get_post($my_id);
+  $title = $post_id->post_title;
+  $img = $post_id->post_attachment;
+  $content = $post_id->post_content;
+  $content = apply_filters('the_content', $content);
+  $content = preg_replace("/<img[^>]+\>/i", " ", $content);          
+  $content = str_replace(']]>', ']]>', $content);
+?>
+
+// ----------------------------------------------//
+\\ - GET THE PAGE CONTENT WITHOUT IMG FROM LOOP -\\
+// ----------------------------------------------//
+
+<?php 
+  $content = get_the_content();
+  $content = preg_replace("/<img[^>]+\>/i", " ", $content);          
+  $content = apply_filters('the_content', $content);
+  $content = str_replace(']]>', ']]>', $content);
+  echo $content;
+?>
+
+// --------------------------//
+\\ - GET THE PAGE IMGS LOOP -\\
+// --------------------------//
+<?php 
+
+    $images = get_children( 
+    array( 
+        'post_parent' => 2, 
+        'post_type' => 'attachment', 
+        'post_mime_type' => 'image', 
+        'orderby' => 'menu_order', 
+        'order' => 'ASC', 
+        'numberposts' => 999 
+        ) 
+    ); 
+
+    if ( $images ) { 
+
+        //looping through the images
+        foreach ( $images as $attachment_id => $attachment ) {
+
+?>
+            <?php echo wp_get_attachment_image( $attachment_id, 'full' ); ?>
+            <?php
+        } 
+    }
+?>

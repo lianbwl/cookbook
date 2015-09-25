@@ -134,6 +134,22 @@ $(".contatobt").click(function(){
   $('html, body').animate({ scrollTop: $(".contato").offset().top }, 700);
 }); 
 
+// ------------------------//
+\\ - SHOW PAGE SCROLL POS -\\
+// ------------------------//
+
+$(window).scroll(function (event) {
+    var pos = $(window).scrollTop();
+    console.log(pos);
+
+    if(pos >= 300){
+      $( "header" ).css( "position", "fixed" );
+    }
+    else{
+      $( "header" ).css( "position", "relative" );
+    }
+});
+
 
 // --------------------//
 \\ - ALINHA PAGINAÇÃO -\\

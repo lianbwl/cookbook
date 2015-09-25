@@ -120,6 +120,21 @@ ul.sitemenu{
 || ------------------ ||
 ||||||||||||||||||||||||
 
+// -------------//
+\\ - SCROLL TO -\\
+// -------------//
+
+/*-- ex. com recuo -30px de onde encontrou o elemento --*/
+$(".contatobt").click(function(){
+  $('html, body').animate({ scrollTop: $(".contato").offset().top - 30 }, 700);
+}); 
+
+/*-- ex. sem recuo --*/
+$(".contatobt").click(function(){
+  $('html, body').animate({ scrollTop: $(".contato").offset().top }, 700);
+}); 
+
+
 // --------------------//
 \\ - ALINHA PAGINAÇÃO -\\
 // --------------------//

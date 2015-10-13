@@ -120,6 +120,14 @@ ul.sitemenu{
 || ------------------ ||
 ||||||||||||||||||||||||
 
+// -------------------//
+\\ - ON RESIZE EVENT -\\
+// -------------------//
+$(window).resize(function() {
+  $("body").prepend( "<div>" + $( window ).width() + "</div>" );
+  // OR DO SOME OTHER STUFF
+});
+
 // -------------//
 \\ - SCROLL TO -\\
 // -------------//

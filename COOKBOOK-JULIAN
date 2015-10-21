@@ -120,6 +120,24 @@ ul.sitemenu{
 || ------------------ ||
 ||||||||||||||||||||||||
 
+
+// --------------------------//
+\\ - TOOGLE FUNCTION.html() -\\
+// --------------------------//
+$('.bticonord').on('click', function(){
+    $(this).html() == '<i class="fa fa-sort-amount-desc"></i>' ? $(this).html('<i class="fa fa-sort-amount-asc"></i>') : $(this).html('<i class="fa fa-sort-amount-desc"></i>');
+});
+
+// explicando
+$('.classe').on('click', function(){
+    $(this).html() == 'valor1' ? $(this).html('valor2') : $(this).html('valor1');
+});
+
+// PORTUGOL
+CLASSE quando clicada executa função{
+  se ISSO for igual a  VALOR1 então aplica VALOR2 senão aplica VALOR1
+}
+
 // -------------------//
 \\ - ON RESIZE EVENT -\\
 // -------------------//

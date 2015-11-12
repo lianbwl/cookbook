@@ -120,6 +120,15 @@ ul.sitemenu{
 || ------------------ ||
 ||||||||||||||||||||||||
 
+// ------------------------------------------------//
+\\ - SPLIT VARIABLES GET FROM URL (split by "/?") -\\
+// ------------------------------------------------//
+
+EX: http://sindijorpr.org.br/institucional-premio-sn/?19ano
+-> extracted variable is : ?19ano
+
+var variaveis = location.search.split("/?");
+console.log(variaveis);
 
 // --------------------------//
 \\ - TOOGLE FUNCTION.html() -\\

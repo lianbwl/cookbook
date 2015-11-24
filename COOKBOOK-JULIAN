@@ -299,6 +299,28 @@ function saiBallon(e){
 || ------------------ ||
 ||||||||||||||||||||||||
 
+// --------------------------------------------------------//
+\\ - GET THE FIRST IMAGE FROM LOOP OF POSTS (using regex) -\\
+// --------------------------------------------------------//
+
+<?php 
+  function catch_that_image() {
+    global $post, $posts;
+    $first_img = '';
+    ob_start();
+    ob_end_clean();
+    $output = preg_match_all('/<img.+src=["]([^"]+)["].*>/i', $post->post_content, $matches);
+    $first_img = $matches [1] [0];
+
+    if(empty($first_img)){ 
+      //Defines a default image
+      $first_img = "/images/default.jpg";
+    }
+
+    return $first_img;
+  }
+?>
+
 // --------------------------------------------//
 \\ - GET THE PAGE CONTENT WITHOUT IMG FROM ID -\\
 // --------------------------------------------//
@@ -312,6 +334,20 @@ function saiBallon(e){
   $content = apply_filters('the_content', $content);
   $content = preg_replace("/<img[^>]+\>/i", " ", $content);          
   $content = str_replace(']]>', ']]>', $content);
+?>
+
+// ------------------------------------------------//
+\\ - GET THE PAGE CONTENT INSIDE DEFINED HTML TAG -\\
+// ------------------------------------------------//
+
+<?php 
+  $my_id = 2;
+  $post_id = get_post($my_id);
+  $title = $post_id->post_title;
+  $img = $post_id->post_attachment;
+  $content = $post_id->post_content;
+  $content = preg_match("#<strong>(.+?)</strong>#", $content_home, $matches); <--- AQUI É A EXPRESSÃO REG. QUE PEGA TUDO DENTRO DA TAG <strong>
+  $content = $matches[1]; <--- DEFINE O CONTENT COM O RESULTADO DA BUSCA DA REGEX
 ?>
 
 // ----------------------------------------------//

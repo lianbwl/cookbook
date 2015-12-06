@@ -322,6 +322,39 @@ function saiBallon(e){
 || ------------------ ||
 ||||||||||||||||||||||||
 
+// ------------------//
+\\ - USING THE LOOP -\\
+// ------------------//
+
+<!-- COMEÇA O LOOP -->
+<?php 
+    $args = array('post_type'=>'post', 'cat' => 2 );
+    $the_query = new WP_Query( $args );
+?>
+
+<?php if ( $the_query->have_posts() ) : ?>
+
+    <!-- pagination here -->
+
+    <!-- the loop -->
+    <?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
+
+        <div class="box-cc">
+            <img src="<?php echo catch_that_image() ?>" alt="Foto">
+            <span class="title-cc"><?php the_title(); ?></span>
+        </div> 
+
+    <?php endwhile; ?>
+    <!-- end of the loop -->
+
+    <!-- pagination here -->
+    <?php wp_reset_postdata(); ?>
+
+<?php else : ?>
+    <p><?php _e( 'Sorry, no posts matched your criteria.' ); ?></p>
+<?php endif; ?> 
+<!-- TERMINA O LOOP -->
+
 // --------------------------------------------------------//
 \\ - GET THE FIRST IMAGE FROM LOOP OF POSTS (using regex) -\\
 // --------------------------------------------------------//

@@ -326,6 +326,28 @@ function saiBallon(e){
 \\ - USING THE LOOP -\\
 // ------------------//
 
+<!--------------------------------------------------->
+<!-- CATCH_THAT_IMAGE (opcional p/ pegar a 1º img) -->
+<!--------------------------------------------------->
+
+<?php 
+  function catch_that_image() {
+    global $post, $posts;
+    $first_img = '';
+    ob_start();
+    ob_end_clean();
+    $output = preg_match_all('/<img.+src=["]([^"]+)["].*>/i', $post->post_content, $matches);
+    $first_img = $matches [1] [0];
+
+    if(empty($first_img)){ 
+      //Defines a default image
+      $first_img = "/images/default.jpg";
+    }
+
+    return $first_img;
+  }
+?>
+
 <!-- COMEÇA O LOOP -->
 <?php 
     $args = array('post_type'=>'post', 'cat' => 2 );
@@ -340,8 +362,15 @@ function saiBallon(e){
     <?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 
         <div class="box-cc">
-            <img src="<?php echo catch_that_image() ?>" alt="Foto">
+            
             <span class="title-cc"><?php the_title(); ?></span>
+        </div>
+        <div class="col-sm-3 box-novidades">
+            <img src="<?php echo catch_that_image() ?>" alt="Foto">
+            <a href="<?php the_permalink() ?>" class="news-title"><?php the_title(); ?></a>
+            <a href="<?php the_permalink() ?>" class="news-txt">
+                 <?php echo wp_trim_words( get_the_content() ); ?>
+            </a>
         </div> 
 
     <?php endwhile; ?>

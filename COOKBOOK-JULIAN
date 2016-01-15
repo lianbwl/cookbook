@@ -326,6 +326,18 @@ function saiBallon(e){
 \\ - USING THE LOOP -\\
 // ------------------//
 
+<!------------------------------------------------------------------------------->
+<!-- PEGA O POST FORMATADO CONFORME EDITADO NO PAINEL E MOSTRA NA PG SEM A IMG -->
+<!------------------------------------------------------------------------------->
+
+<?php
+   ob_start();
+   the_content('Read the full post',true);
+   $postOutput = preg_replace('/<img[^>]+./','', ob_get_contents());
+   ob_end_clean();
+   echo $postOutput;
+?>
+
 <!--------------------------------------------------->
 <!-- CATCH_THAT_IMAGE (opcional p/ pegar a 1º img) -->
 <!--------------------------------------------------->
@@ -446,6 +458,18 @@ function saiBallon(e){
   $content = str_replace(']]>', ']]>', $content);
   echo $content;
 ?>
+
+// ---------------------------------------------------------//
+\\ - INSERIR NO formating.php PARA REMOVER IMGS DO CONTENT -\\
+// ---------------------------------------------------------//
+
+// -------------------------- //
+\\ - function wp_trim_words - \\
+// -------------------------- //
+
+$original_text = $text;
+// $text = wp_strip_all_tags( $text );
+$text = preg_replace('/<img[^>]+./','', $text);
 
 // --------------------------//
 \\ - GET THE PAGE IMGS LOOP -\\

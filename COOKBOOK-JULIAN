@@ -361,6 +361,12 @@ function myHTMLInclude() {
 || ------------------ ||
 ||||||||||||||||||||||||
 
+// --------------------------------//
+\\ - USING SHORTCODES IN TEMPLATE -\\
+// --------------------------------//
+
+<?php echo do_shortcode('[contact-form-7 id="109" title="Formulário de contato 1"]'); ?>
+
 // ------------------//
 \\ - USING THE LOOP -\\
 // ------------------//

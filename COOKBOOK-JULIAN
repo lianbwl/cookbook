@@ -371,6 +371,16 @@ function myHTMLInclude() {
 \\ - USING THE LOOP -\\
 // ------------------//
 
+<!-- COMEÇA O LOOP -->
+<?php query_posts($query_string . '&cat=2'); ?>
+<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+  <?php the_content(); ?>
+
+<?php endwhile; else: ?>
+<p>Sorry, no posts matched your criteria.</p>
+<?php endif; ?>
+<!-- TERMINA O LOOP -->
+
 <!------------------------------------------------------------------------------->
 <!-- PEGA O POST FORMATADO CONFORME EDITADO NO PAINEL E MOSTRA NA PG SEM A IMG -->
 <!------------------------------------------------------------------------------->

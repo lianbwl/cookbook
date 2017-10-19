@@ -579,3 +579,10 @@ if (function_exists('register_sidebar'))
 // no .html
 
 <?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('Sidebar') ) : ?><?php endif; ?>
+
+/////////////
+// ANGULAR //
+/////////////
+
+// Pegar elemento pelo id no AngularJs
+var el = angular.element(document.querySelector('#form_baixar'));;

@@ -586,3 +586,6 @@ if (function_exists('register_sidebar'))
 
 // Pegar elemento pelo id no AngularJs
 var el = angular.element(document.querySelector('#form_baixar'));;
+
+// REGEX PARA TIRAR BARRA '/'
+.replace(/\D+/g, '')

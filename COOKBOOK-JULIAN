@@ -589,3 +589,316 @@ var el = angular.element(document.querySelector('#form_baixar'));;
 
 // REGEX PARA TIRAR BARRA '/'
 .replace(/\D+/g, '')
+
+AppDFe.factory('BaseFunctions', ['$http', 'BaseFunctionsHttp', 'globais', function ($http, BaseFunctionsHttp, globais) {
+
+    var baseFunctionsFactory = {};
+    
+    var _showConfirm = function (title, message, okButtonTitle, cancelButtonTitle, okCallback, cancelCallback) {
+
+    };
+
+    var _isNullOrWhiteSpace = function (value) {
+        if (value == null) return true;
+        return value.toString().replace(/\s/g, '').length == 0;
+    };
+
+    var _padLeft = function (nr, n, str) {
+        return Array(n - String(nr).length + 1).join(str || '0') + nr;
+    }
+
+    var _configurarMascaras = function () {
+
+        var SPMaskBehaviorTelefone = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+        },
+            spOptionsTelefone = {
+                onKeyPress: function (val, e, field, options) {
+                    field.mask(SPMaskBehaviorTelefone.apply({}, arguments), options);
+                }
+            };
+
+
+        $(angular.element('.telefone')).mask(SPMaskBehaviorTelefone, spOptionsTelefone);
+
+
+        var SPMaskBehaviorCNPJ_CPF = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '000.000.000-00?9' : '00.000.000/0000-00';
+        },
+            spOptionsCNPJ_CPF = {
+                onKeyPress: function (val, e, field, options) {
+                    field.mask(SPMaskBehaviorCNPJ_CPF.apply({}, arguments), options);
+                }
+            };
+
+        $(angular.element('.cpf_cnpj')).mask(SPMaskBehaviorCNPJ_CPF, spOptionsCNPJ_CPF);
+        $(angular.element('.cnpj')).mask("00.000.000/0000-00");
+        $(angular.element('.cep')).mask("99999-999");
+        $(angular.element('.maskData')).mask("99/99/9999");
+        $(angular.element('.maskDecimal')).mask('999,0000');
+        //$(angular.element(".maskMoney")).maskMoney({ symbol: 'R$ ', thousands: '.', decimal: ',', symbolStay: true, allowZero: true });
+        //$(angular.element('.maskMoney')).mask('###0.00', { reverse: true });
+        $(angular.element('.maskMoney')).mask('#.##0,00', { reverse: true });
+        $(angular.element('.maskFourDecimal')).mask('#0,0000', { reverse: true });
+        $(angular.element('.number')).mask('0#');
+        $(angular.element('.percent')).mask('##0,00', { reverse: true });
+    };
+
+    var _formataTelefone = function (val) {
+        val = val.replace(/\D/g, "");
+        val = val.replace(/^(\d{2})(\d)/g, "($1) $2");
+        val = val.replace(/(\d)(\d{4})$/, "$1-$2");
+        return val;
+    };
+
+    var _formataCNPJ_CPF = function (val) {
+        return _isCPF(val) ? val.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "\$1.\$2.\$3\-\$4") : val.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g, "\$1.\$2.\$3\/\$4\-\$5");
+    };
+
+    var _isCPF = function (val) {
+        if (val == null)
+            return false;
+        return val.replace(/\D/g, '').length === 11 ? true : false;
+    };
+
+    var _isCNPJ = function (val) {
+        if (val == null)
+            return false;
+        return val.replace(/\D/g, '').length === 14 ? true : false;
+    };
+
+    var _validaEmpresa = function (val) {     
+       
+        var url = "http://www.econet.net.br/apiEcoDFe/api/Empresa/ListarEmpresas/" + val;
+
+        BaseFunctionsHttp.Get(url).then(function (response) {
+            
+            if (response == null || response == '') {
+
+                var tituloModal = "<span style='font-weight: bold; padding-left:95px'>USUÁRIO NÃO POSSUI EMPRESA CADASTRADA</span>";
+                tituloModal += "<hr class='divider' style='width:100%' />"
+                tituloModal += "<img class='modalEmpresaImagem' src='Content/img/modal-warning.png' style='width:100px; height:100px; margin-left:250px;'>";
+                tituloModal += "<br /><span class='modalEmpresaTitulo' style='padding-left:244px; font-size:x-large; font-weight:bold'>ATENÇÃO</span><br />";
+                tituloModal += "<br /><span class='modalEmpresaSubTitulo'>Para realizar a&ccedil;&otilde;es dentro do sistema voc&ecirc; deve ter uma empresa ativa registrada. ";
+                tituloModal += "Para efetuar o cadastro basta acessar a op&ccedil;&atilde;o EMPRESA do menu ou <a href='/EcoDFe/#/Empresa/CadastrarEmpresa'><strong style='text-decoration: underline'>clique aqui</strong></a>.";
+                tituloModal += "</span>";
+                tituloModal += "<hr class='divider' style='width:100%' /> </br>"
+
+                swal({
+                    html: tituloModal,
+                    cancelButtonClass: 'btn btn-secondary btnModalEmpresa',
+                    cancelButtonText: 'Fechar',
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: false,
+                    buttonsStyling: false,
+                    padding: 0,
+                    width: 700,
+                }).then(function (result) {
+                    swal({
+
+                    });
+                })
+                $(".swal2-content").css("text-align", "left");
+            }
+        });
+    };
+
+    var _retirarMascaras = function (val) {
+        return val.replace(/\D/g, '');
+    };
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    var _msgWarning = function (msg) {   
+        
+        toastr.remove();
+        toastr.clear();
+        toastr.warning(msg, 'Aten&ccedil;&atilde;o!');
+    }
+
+    var _msgError = function (msg) {
+        toastr.remove();
+        toastr.clear();
+
+        toastr.error(msg, 'Erro!')
+    }
+
+    var _msgSuccess = function (msg) {
+        toastr.remove();
+        toastr.clear();
+        toastr.success(msg, 'Aviso!');
+    }
+
+    var _msgInfo = function (msg) {
+        toastr.remove();
+        toastr.clear();
+        toastr.info(msg, 'Aviso!');
+    }
+
+    var _msgNoEmpresa = function(){
+
+        if (globais.hasEmpresa == 0 || globais.hasEmpresa == undefined){        
+
+            var tituloModal = "<span style='font-weight: bold; display: block;'>USUÁRIO N&Atilde;O POSSU&Iacute; EMPRESA CADASTRADA</span>";
+            tituloModal += "<hr class='divider' style='width:100%; margin-bottom: 43px' />";
+            tituloModal += "<img class='modalEmpresaImagem' src='Content/img/modal-warning.png' style='width:100px; margin: 0 auto; height:100px; display: block;'>";
+            tituloModal += "<br /><span class='modalEmpresaTitulo' style='color: #464655; display: block; font-size:x-large; font-weight:bold; margin-left: 21px; margin-top: -16px; margin-bottom: 31px'>ATEN&Ccedil;&Atilde;O</span><br />";
+            tituloModal += "<br /><span class='modalEmpresaSubTitulo' style='display:block'>Para realizar a&ccedil;&otilde;es dentro do sistema voc&ecirc; deve ter uma empresa ativa registrada.";
+            tituloModal += "</span>";
+            tituloModal += "<hr class='divider' style='width:100%' />";
+
+            swal({
+                html: tituloModal,
+                confirmButtonClass: 'btn btn-secondary btnFeedback',
+                confirmButtonText: 'Cadastrar',
+                cancelButtonClass: 'btn btn-secondary btnModalEmpresa',
+                showCancelButton: false,
+                showConfirmButton: true,
+                showCloseButton: false,
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                buttonsStyling: false,
+                padding: 0,
+                width: 700, 
+            })
+            .then(function (result) {
+                window.location.href = "/EcoDFe/#/Empresa/CadastrarEmpresa/";
+            });
+        }
+    }
+
+    var _valida_cpf_cnpj = function(valor){
+
+        var valida = _verifica_cpf_cnpj(valor);
+
+        valor = valor.toString();
+        valor = valor.replace(/[^0-9]/g, '');
+
+        if(valida === 'CPF'){
+            return _valida_cpf(valor);
+        } 
+        else if(valida === 'CNPJ'){
+            return _valida_cnpj(valor);
+        } 
+        else{
+            return false;
+        } 
+    }
+
+    var _verifica_cpf_cnpj = function(valor){
+
+        valor = valor.toString();
+        valor = valor.replace(/[^0-9]/g, '');
+
+        if ( valor.length === 11 ) {
+            return 'CPF';
+        } 
+        else if ( valor.length === 14 ) {
+            return 'CNPJ';
+        } 
+        else {
+            return false;
+        }
+    }
+
+    var _valida_cpf = function(valor){
+
+        valor = valor.toString();
+        valor = valor.replace(/[^0-9]/g, '');
+
+        var digitos = valor.substr(0, 9);
+        var novo_cpf = _calc_digitos_posicoes( digitos );
+        var novo_cpf = _calc_digitos_posicoes( novo_cpf, 11 );
+
+        if ( novo_cpf === valor ) {
+            return true;
+        } else {
+            return false;
+        } 
+    }
+
+    var _valida_cnpj = function(valor){
+
+        valor = valor.toString();
+        valor = valor.replace(/[^0-9]/g, '');
+
+        var cnpj_original = valor;
+        var primeiros_numeros_cnpj = valor.substr( 0, 12 );
+
+        var primeiro_calculo = _calc_digitos_posicoes( primeiros_numeros_cnpj, 5 );
+        var segundo_calculo = _calc_digitos_posicoes( primeiro_calculo, 6 );
+
+        var cnpj = segundo_calculo;
+        if ( cnpj === cnpj_original ) {
+            return true;
+        }
+
+        return false;   
+    }
+
+    var _calc_digitos_posicoes = function( digitos, posicoes = 10, soma_digitos = 0 ) {
+        
+        digitos = digitos.toString();
+
+        for (var i = 0; i < digitos.length; i++) {
+            soma_digitos = soma_digitos + ( digitos[i] * posicoes );
+            posicoes--;
+
+            if ( posicoes < 2 ) {
+                posicoes = 9;
+            }
+        }
+
+        soma_digitos = soma_digitos % 11;
+
+        if ( soma_digitos < 2 ) {
+            soma_digitos = 0;
+        } else {
+            soma_digitos = 11 - soma_digitos;
+        }
+
+        var cpf = digitos + soma_digitos;
+
+        return cpf;  
+    } 
+
+    //Seta a Função para ficar visivel
+    baseFunctionsFactory.ValidaCPF_CNPJ = _valida_cpf_cnpj;
+    baseFunctionsFactory.MsgNoEmpresa = _msgNoEmpresa;
+    baseFunctionsFactory.MsgWarning = _msgWarning;
+    baseFunctionsFactory.MsgError = _msgError;
+    baseFunctionsFactory.MsgSuccess = _msgSuccess;
+    baseFunctionsFactory.MsgInfo = _msgInfo;
+    baseFunctionsFactory.ShowConfirm = _showConfirm;
+    baseFunctionsFactory.IsNullOrWhiteSpace = _isNullOrWhiteSpace;
+    baseFunctionsFactory.PadLeft = _padLeft;
+    baseFunctionsFactory.ConfigurarMascaras = _configurarMascaras;
+    baseFunctionsFactory.FormataTelefone = _formataTelefone;
+    baseFunctionsFactory.FormataCNPJ_CPF = _formataCNPJ_CPF;
+    baseFunctionsFactory.IsCPF = _isCPF;
+    baseFunctionsFactory.IsCNPJ = _isCNPJ;
+    baseFunctionsFactory.RetirarMascaras = _retirarMascaras;
+    baseFunctionsFactory.ValidaEmpresa = _validaEmpresa;
+
+    //Retorna lista de funções
+    return baseFunctionsFactory;
+}]);

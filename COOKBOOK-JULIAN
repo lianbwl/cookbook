@@ -902,3 +902,9 @@ AppDFe.factory('BaseFunctions', ['$http', 'BaseFunctionsHttp', 'globais', functi
     //Retorna lista de funções
     return baseFunctionsFactory;
 }]);
+
+// SCOPE $WATCH (APLICAR AO MUDAR O SCOPE)
+$scope.$watch('strEndereco', function() {
+	var cpfcnpj = $scope.strEndereco;
+	$scope.strEndereco = $filter('uppercase')(cpfcnpj);
+});

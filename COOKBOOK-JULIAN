@@ -908,3 +908,9 @@ $scope.$watch('strEndereco', function() {
 	var cpfcnpj = $scope.strEndereco;
 	$scope.strEndereco = $filter('uppercase')(cpfcnpj);
 });
+
+// SETA MENU COM NG-CLASS
+// EX: <li ng-class="setMenu('/Home')">
+$scope.setMenu = function(path){
+    return ($location.path().substr(0, path.length) === path) ? 'active' : '';
+}

@@ -914,3 +914,36 @@ $scope.$watch('strEndereco', function() {
 $scope.setMenu = function(path){
     return ($location.path().substr(0, path.length) === path) ? 'active' : '';
 }
+
+// PROMISE ANGULAR JS
+
+function Promessa(){
+    return $q(function(resolve, reject) {
+	BaseFunctionsHttp.Get(url).then(function (response) {    
+	    planoInfo = response;  
+	    dataHoje = new Date();        
+	    DataHoje = dataHoje.setDate(dataHoje.getDate() + 1);
+
+	    total = planoInfo.intQtdeNotasConsumoMesAtual;
+	    limite = planoInfo.intQtdeNotasLimiteMensal;
+
+	    porcentagem = (total*100) / limite;           
+	    porcentagemPlano = parseInt(porcentagem);
+
+	    if(response != null){
+		resolve([DataHoje, porcentagemPlano, planoInfo]);
+	    }
+	    else{
+		reject("Erro, não foi possível calcular");
+	    }
+	});                  
+    });
+}  
+
+var promise = Promessa();
+promise.then(function(a, b, c) {
+    retorno = [a, b, c];
+    return retorno;          
+}, function(response) {
+    console.log('ERRO: ' + response);
+}); 

@@ -947,3 +947,21 @@ promise.then(function(a, b, c) {
 }, function(response) {
     console.log('ERRO: ' + response);
 }); 
+
+//////////////////////////////////////////////
+// FILTER BY A ARRAY OF VALUES OF SAME TYPE //
+//////////////////////////////////////////////
+
+// Creating a custom filter might be overkill here, you can just pass in a custom comparator, if you have the multiples values like:
+
+$scope.selectedGenres = "Action, Drama"; 
+
+$scope.containsComparator = function(expected, actual){  
+  return actual.indexOf(expected) > -1;
+};
+
+// then in the filter:
+
+filter:{name:selectedGenres}:containsComparator
+
+https://stackoverflow.com/questions/15868248/how-to-filter-multiple-values-or-operation-in-angularjs
